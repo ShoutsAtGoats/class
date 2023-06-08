@@ -230,8 +230,18 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    # # FILL IN YOUR CODE HERE AND DELETE "pass"
+    # pass
+    choices = []
+
+    for word in wordlist:
+        if match_with_gaps(my_word, word):
+            choices.append(word)
+    
+    for choice in enumerate(choices):
+        print(choice)
+    
+
 
 
 
@@ -263,7 +273,49 @@ def hangman_with_hints(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    # pass
+    guesses = 0
+    letters_guessed = []
+    word_length = len(secret_word)
+    print('The Secret word is', word_length, '- letters long.')
+    
+    guesses_remaining = 6 - guesses
+
+    print('You have:', guesses_remaining, '- guesses remaining.')
+
+    while True:
+        guesses_remaining = 6 - guesses
+        print('You have:', guesses_remaining, 'guesses remaining.')
+        print('Guessed letters:', ','.join(letters_guessed))
+
+        if guesses_remaining <= 0:
+            print('Sorry, you lose. Out of guesses.', 'The word was:', secret_word)
+            return False
+
+        user_word= get_guessed_word(secret_word, letters_guessed)
+        print('Current guessed word:', "'", user_word, "'")
+        user_input = input('Choose letter:').lower()
+        available_letters = get_available_letters(letters_guessed)
+        
+        if user_input == '*':
+            show_possible_matches(user_word)
+            continue
+        if user_input not in available_letters:
+          print('Letter already guessed, choose again')
+        else:
+            if user_input in secret_word:
+                print('Good guess!')
+            else:
+                print('Oops! That letter is not in my word.')
+            guesses += 1
+            letters_guessed.append(user_input)
+            user_word= get_guessed_word(secret_word, letters_guessed)
+            
+            print('Current guessed word:', "'", user_word, "'")
+            
+            if is_word_guessed(secret_word, letters_guessed):
+              print('Congratulations, you won!')
+              return True
 
 
 
@@ -279,13 +331,13 @@ if __name__ == "__main__":
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
     
-    secret_word = choose_word(wordlist)
-    hangman(secret_word)
+    # secret_word = choose_word(wordlist)
+    # hangman(secret_word)
 
 ###############
     
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
-    # secret_word = choose_word(wordlist)
-    # hangman_with_hints(secret_word)
+    secret_word = choose_word(wordlist)
+    hangman_with_hints(secret_word)
